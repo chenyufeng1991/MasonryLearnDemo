@@ -51,6 +51,10 @@ mas_greaterThanOrEqualTo就是大于等于；
 mas_lessThanOrEqualTo就是小于等于；
  */
 
+/**
+ *  multipliedBy(0.5)
+  这个参数就是设置比例系数
+ */
 
 @implementation FirstViewController
 
@@ -118,7 +122,8 @@ mas_lessThanOrEqualTo就是小于等于；
         make.centerY.equalTo(weakSelf.grayView.mas_centerY);
         make.left.equalTo(weakSelf.grayView.mas_left).with.offset(15);
         make.right.equalTo(subView2.mas_left).with.offset(-15);
-        make.height.equalTo(@50);
+        //设置subView1的高度为grayView高度的0.5.
+        make.height.equalTo(self.grayView).multipliedBy(0.5);
         make.width.equalTo(subView2.mas_width);
     }];
 
@@ -126,7 +131,7 @@ mas_lessThanOrEqualTo就是小于等于；
         make.centerY.equalTo(weakSelf.grayView.mas_centerY);
         make.left.equalTo(subView1.mas_right).with.offset(15);
         make.right.equalTo(weakSelf.grayView.mas_right).offset(-15);
-        make.height.equalTo(@50);
+        make.height.equalTo(self.grayView).multipliedBy(0.5);
         make.width.equalTo(subView1.mas_width);
     }];
 
@@ -138,7 +143,7 @@ mas_lessThanOrEqualTo就是小于等于；
         make.left.equalTo(weakSelf.grayView).with.offset(15);
         //下面的mas_left不能省略，因为前面的参数是right,当前后参数不一致时，不能省略后面的参数
         make.right.equalTo(subView2.mas_left).with.offset(-15);
-        make.height.equalTo(@50);
+        make.height.equalTo(self.grayView).multipliedBy(0.5);
         //可以省略下面subView2的width参数
         make.width.equalTo(subView2);
     }];
@@ -147,12 +152,10 @@ mas_lessThanOrEqualTo就是小于等于；
         make.centerY.equalTo(weakSelf.grayView);
         make.left.equalTo(subView1.mas_right).with.offset(15);
         make.right.equalTo(weakSelf.grayView).offset(-15);
-        make.height.equalTo(@50);
+        make.height.equalTo(self.grayView).multipliedBy(0.5);
         make.width.equalTo(subView1);
     }];
 }
-
-
 
 @end
 
