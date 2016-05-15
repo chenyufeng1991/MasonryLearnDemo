@@ -164,13 +164,13 @@ mas_lessThanOrEqualTo就是小于等于；
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setRedView];
-    [self setGrayViewEdgeInsetToRedView];
-    [self setTwoViewInGrayView];
+    //    [self setRedView];
+    //    [self setGrayViewEdgeInsetToRedView];
+    //    [self setTwoViewInGrayView];
+    //
+    //    [self setMutiplierAndConstant];
 
-    [self setMutiplierAndConstant];
-
-
+    [self setViewWithKey];
 }
 
 //绘制一个红色的View
@@ -284,6 +284,59 @@ mas_lessThanOrEqualTo就是小于等于；
         make.height.equalTo(weakSelf.view.mas_height).multipliedBy(0.2).offset(0);
         make.top.equalTo(weakSelf.redView.mas_bottom).multipliedBy(1).offset(0);
         make.left.equalTo(weakSelf.view.mas_left).multipliedBy(1).offset(10);
+    }];
+}
+
+/**
+ *  这里要用到mas_key属性，其实也相当于View原生的tag属性一样，是为了来区分不同的View的。mas_key标识的是字符串，更加方便直观。
+ */
+/**
+ 下面的方法中的约束是包含冲突的，当没有设置mas_key时，警告输出是这样的：
+ Probably at least one of the constraints in the following list is one you don't want.
+	Try this:
+ (1) look at each constraint and try to figure out which you don't expect;
+ (2) find the code that added the unwanted constraint or constraints and fix it.
+ (
+ "<MASLayoutConstraint:0x7fef6a6a5d80 UIView:0x7fef6a4289d0.width == 100>",
+ "<MASLayoutConstraint:0x7fef6a7161a0 UIView:0x7fef6a4289d0.left == UIView:0x7fef6a40b970.left + 10>",
+ "<MASLayoutConstraint:0x7fef6a7145e0 UIView:0x7fef6a4289d0.right == UIView:0x7fef6a40b970.right - 10>",
+ "<NSLayoutConstraint:0x7fef6a7ade60 UIView:0x7fef6a40b970.width == 320>"
+ )
+
+ Will attempt to recover by breaking constraint
+ <MASLayoutConstraint:0x7fef6a6a5d80 UIView:0x7fef6a4289d0.width == 100>
+ */
+
+/**
+ *  当设置mas_key后，警告输出是这样的：提示信息就非常明确了。
+ Probably at least one of the constraints in the following list is one you don't want.
+	Try this:
+ (1) look at each constraint and try to figure out which you don't expect;
+ (2) find the code that added the unwanted constraint or constraints and fix it.
+ (
+ "<MASLayoutConstraint:0x7fbf23e3b0b0 UIView:firstView.width == 100>",
+ "<MASLayoutConstraint:0x7fbf23e58410 UIView:firstView.left == UIView:self.view.left + 10>",
+ "<MASLayoutConstraint:0x7fbf23e588d0 UIView:firstView.right == UIView:self.view.right - 10>",
+ "<NSLayoutConstraint:0x7fbf23e5a610 UIView:self.view.width == 320>"
+ )
+
+ Will attempt to recover by breaking constraint
+ <MASLayoutConstraint:0x7fbf23e3b0b0 UIView:firstView.width == 100>
+ */
+- (void)setViewWithKey
+{
+    UIView *firstView = [[UIView alloc] init];
+    firstView.backgroundColor = [UIColor blackColor];
+    [self.view addSubview:firstView];
+
+    self.view.mas_key = @"self.view";
+    firstView.mas_key = @"firstView";
+
+    //写一个冲突的约束
+    [firstView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(100, 100));
+        make.left.offset(10);
+        make.right.offset(-10);
     }];
 }
 
