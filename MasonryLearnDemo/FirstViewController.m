@@ -182,6 +182,7 @@ mas_lessThanOrEqualTo就是小于等于；
  小技巧：
  （1）multipier默认为1时，可以不写。
  （2）offset默认为0时，可以不写。
+ 所以，如果你不嫌麻烦的话，可以对所有的约束添加multipliedBy()和offset().看起来也会清楚直观。
  */
 - (void)setMutiplierAndConstant
 {
@@ -192,9 +193,9 @@ mas_lessThanOrEqualTo就是小于等于；
 
     [yellowView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(weakSelf.view.mas_width).offset(-10).multipliedBy(0.5);//根据公式，这里的-10就是constant.
-        make.height.equalTo(weakSelf.view.mas_height).multipliedBy(0.2);
-        make.top.equalTo(weakSelf.redView.mas_bottom);
-        make.left.equalTo(weakSelf.view.mas_left).offset(10);
+        make.height.equalTo(weakSelf.view.mas_height).multipliedBy(0.2).offset(0);
+        make.top.equalTo(weakSelf.redView.mas_bottom).multipliedBy(1).offset(0);
+        make.left.equalTo(weakSelf.view.mas_left).multipliedBy(1).offset(10);
     }];
 }
 
