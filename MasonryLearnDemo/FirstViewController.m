@@ -31,8 +31,8 @@
  - (NSArray *)mas_remakeConstraints:(void(^)(MASConstraintMaker *make))block;
  
  
-mas_makeConstraints:只负责新增约束，Autolayout不能同时存在两条针对同一对象的约束，否则会报错；
-mas_updateConstraints:针对上面的情况，会更新在block中出现的约束，不会导致出现两个相同约束的情况；
+mas_makeConstraints:只负责新增约束，初次设置约束使用；
+mas_updateConstraints:针对上面的情况，会更新在block中出现的约束。如果找不到这条约束，会新增。
 mas_remakeConstraints：会清除之前的所有约束，仅保留最新的约束；
 
  */
@@ -69,6 +69,94 @@ mas_lessThanOrEqualTo就是小于等于；
 
 // 设置所有的常量
 - (MASConstraint * (^)(CGFloat offset))offset;
+ */
+
+/**
+ *  对于一个约束，实际表示的是不等或者相等关系：
+ aView.Leading = 1.0 * bView.Trailing + 10;
+ 
+ aView：Item1；
+ Leading：Attribute1;
+ = :Relationship；
+ 1.0 ：Multipler；
+ bView：Item2；
+ Trailing：Attribute2；
+ 10 ：Constant;
+
+ */
+
+/**
+ *  make是MASConstraintMaker类型。MASConstraintMaker提供了22种Attribute类型。
+ 
+ //第一类
+ @property (nonatomic, strong, readonly) MASConstraint *left;
+ @property (nonatomic, strong, readonly) MASConstraint *top;
+ @property (nonatomic, strong, readonly) MASConstraint *right;
+ @property (nonatomic, strong, readonly) MASConstraint *bottom;
+ @property (nonatomic, strong, readonly) MASConstraint *leading;
+ @property (nonatomic, strong, readonly) MASConstraint *trailing;
+ @property (nonatomic, strong, readonly) MASConstraint *width;
+ @property (nonatomic, strong, readonly) MASConstraint *height;
+ @property (nonatomic, strong, readonly) MASConstraint *centerX;
+ @property (nonatomic, strong, readonly) MASConstraint *centerY;
+ @property (nonatomic, strong, readonly) MASConstraint *baseline;
+
+ //第二类
+ @property (nonatomic, strong, readonly) MASConstraint *leftMargin;
+ @property (nonatomic, strong, readonly) MASConstraint *rightMargin;
+ @property (nonatomic, strong, readonly) MASConstraint *topMargin;
+ @property (nonatomic, strong, readonly) MASConstraint *bottomMargin;
+ @property (nonatomic, strong, readonly) MASConstraint *leadingMargin;
+ @property (nonatomic, strong, readonly) MASConstraint *trailingMargin;
+ @property (nonatomic, strong, readonly) MASConstraint *centerXWithinMargins;
+ @property (nonatomic, strong, readonly) MASConstraint *centerYWithinMargins;
+ 
+ //第三类
+ @property (nonatomic, strong, readonly) MASConstraint *edges;
+ @property (nonatomic, strong, readonly) MASConstraint *size;
+ @property (nonatomic, strong, readonly) MASConstraint *center;
+ 
+ 
+ （1）第一类是基本属性，向下支持到iOS6，一般用的比较多；
+ （2）第二类是边缘相关属性，向下支持到iOS8，由于版本要求比较高，所以用的比较少；
+ （3）第三类是复合属性，edges（left,top,right,bottom）,size(width,height),center(centerX,centerY).
+
+ */
+
+/**
+ *  扩展UiView中的属性：
+
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_left;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_top;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_right;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_bottom;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_leading;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_trailing;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_width;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_height;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_centerX;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_centerY;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_baseline;
+ @property (nonatomic, strong, readonly) MASViewAttribute *(^mas_attribute)(NSLayoutAttribute attr);
+
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_leftMargin;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_rightMargin;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_topMargin;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_bottomMargin;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_leadingMargin;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_trailingMargin;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_centerXWithinMargins;
+ @property (nonatomic, strong, readonly) MASViewAttribute *mas_centerYWithinMargins;
+ 
+ 
+ 基本和MASConstraintMaker中的属性一样，只是每个属性前面都有mas_前缀，因为这个类是扩展UiView的，为了和系统类中属性区别，所以加了前缀。
+
+ */
+
+/**
+ *  小技巧：
+ （1）如果等式两边的Attribute是一样的，可以省略等式右边的Atteibute;
+  (2)如果是等于关系，并且右边的view是父view，equal_to也可以省略。
  */
 
 @implementation FirstViewController
