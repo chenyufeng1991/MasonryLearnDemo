@@ -129,6 +129,27 @@ mas_lessThanOrEqualTo就是小于等于；
         make.height.equalTo(@50);
         make.width.equalTo(subView1.mas_width);
     }];
+
+    //以上的两个约束还有如下简化的写法
+    [subView1 mas_remakeConstraints:^(MASConstraintMaker *make) {
+        //设置subView1的centerY属性，如果后面的grayView的参数也是centerY的话，就可以省略
+        make.centerY.equalTo(weakSelf.grayView);
+        //因为默认也是想要和grayView的左边距对齐，所以可以省略mas_left;
+        make.left.equalTo(weakSelf.grayView).with.offset(15);
+        //下面的mas_left不能省略，因为前面的参数是right,当前后参数不一致时，不能省略后面的参数
+        make.right.equalTo(subView2.mas_left).with.offset(-15);
+        make.height.equalTo(@50);
+        //可以省略下面subView2的width参数
+        make.width.equalTo(subView2);
+    }];
+
+    [subView2 mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(weakSelf.grayView);
+        make.left.equalTo(subView1.mas_right).with.offset(15);
+        make.right.equalTo(weakSelf.grayView).offset(-15);
+        make.height.equalTo(@50);
+        make.width.equalTo(subView1);
+    }];
 }
 
 
