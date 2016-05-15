@@ -54,6 +54,21 @@ mas_lessThanOrEqualTo就是小于等于；
 /**
  *  multipliedBy(0.5)
   这个参数就是设置比例系数
+ 
+ 常数系数:
+ Masonry提供了四种设置Constant的方法：
+ 
+// 设置left,right,top,bottom.接收MASEdgeInsets类型，其实也就是UIEdgeInsets类型，使用UIEdgeInsetsMake方法设置。
+- (MASConstraint * (^)(MASEdgeInsets insets))insets;
+
+// 设置width,height。接收CGSize类型，使用CGSizeMake方法设置。
+- (MASConstraint * (^)(CGSize offset))sizeOffset;
+
+// 设置centerX,centerY
+- (MASConstraint * (^)(CGPoint offset))centerOffset;
+
+// 设置所有的常量
+- (MASConstraint * (^)(CGFloat offset))offset;
  */
 
 @implementation FirstViewController
@@ -64,6 +79,8 @@ mas_lessThanOrEqualTo就是小于等于；
     [self setRedView];
     [self setGrayViewEdgeInsetToRedView];
     [self setTwoViewInGrayView];
+
+    [self setMutiplierAndConstant];
 
 
 }
@@ -123,7 +140,7 @@ mas_lessThanOrEqualTo就是小于等于；
         make.left.equalTo(weakSelf.grayView.mas_left).with.offset(15);
         make.right.equalTo(subView2.mas_left).with.offset(-15);
         //设置subView1的高度为grayView高度的0.5.
-        make.height.equalTo(self.grayView).multipliedBy(0.5);
+        make.height.equalTo(weakSelf.grayView).multipliedBy(0.5);
         make.width.equalTo(subView2.mas_width);
     }];
 
@@ -131,7 +148,7 @@ mas_lessThanOrEqualTo就是小于等于；
         make.centerY.equalTo(weakSelf.grayView.mas_centerY);
         make.left.equalTo(subView1.mas_right).with.offset(15);
         make.right.equalTo(weakSelf.grayView.mas_right).offset(-15);
-        make.height.equalTo(self.grayView).multipliedBy(0.5);
+        make.height.equalTo(weakSelf.grayView).multipliedBy(0.5);
         make.width.equalTo(subView1.mas_width);
     }];
 
@@ -143,7 +160,7 @@ mas_lessThanOrEqualTo就是小于等于；
         make.left.equalTo(weakSelf.grayView).with.offset(15);
         //下面的mas_left不能省略，因为前面的参数是right,当前后参数不一致时，不能省略后面的参数
         make.right.equalTo(subView2.mas_left).with.offset(-15);
-        make.height.equalTo(self.grayView).multipliedBy(0.5);
+        make.height.equalTo(weakSelf.grayView).multipliedBy(0.5);
         //可以省略下面subView2的width参数
         make.width.equalTo(subView2);
     }];
@@ -152,10 +169,35 @@ mas_lessThanOrEqualTo就是小于等于；
         make.centerY.equalTo(weakSelf.grayView);
         make.left.equalTo(subView1.mas_right).with.offset(15);
         make.right.equalTo(weakSelf.grayView).offset(-15);
-        make.height.equalTo(self.grayView).multipliedBy(0.5);
+        make.height.equalTo(weakSelf.grayView).multipliedBy(0.5);
         make.width.equalTo(subView1);
     }];
 }
+
+//比例系数和常数
+/**
+ *  我要绘制一个View，宽度是self.view的0.5再减少10，高度是self.view的0.2，距离self.view左边距10，根据以下公式：
+ A.width = multipier * B.width + constant
+ 
+ 小技巧：
+ （1）multipier默认为1时，可以不写。
+ （2）offset默认为0时，可以不写。
+ */
+- (void)setMutiplierAndConstant
+{
+    WeakSelf(weakSelf);
+    UIView *yellowView = [[UIView alloc] init];
+    yellowView.backgroundColor = [UIColor yellowColor];
+    [self.view addSubview:yellowView];
+
+    [yellowView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(weakSelf.view.mas_width).offset(-10).multipliedBy(0.5);//根据公式，这里的-10就是constant.
+        make.height.equalTo(weakSelf.view.mas_height).multipliedBy(0.2);
+        make.top.equalTo(weakSelf.redView.mas_bottom);
+        make.left.equalTo(weakSelf.view.mas_left).offset(10);
+    }];
+}
+
 
 @end
 
