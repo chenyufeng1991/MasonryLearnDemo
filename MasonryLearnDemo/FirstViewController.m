@@ -59,11 +59,12 @@ mas_lessThanOrEqualTo就是小于等于；
     [super viewDidLoad];
     [self setRedView];
     [self setGrayViewEdgeInsetToRedView];
+    [self setTwoViewInGrayView];
 
 
 }
 
-
+//绘制一个红色的View
 - (void)setRedView
 {
     WeakSelf(weakSelf);
@@ -79,6 +80,7 @@ mas_lessThanOrEqualTo就是小于等于；
     }];
 }
 
+//在红色的View中绘制一个灰色的View
 - (void)setGrayViewEdgeInsetToRedView
 {
     WeakSelf(weakSelf);
@@ -88,7 +90,7 @@ mas_lessThanOrEqualTo就是小于等于；
     [self.redView addSubview:self.grayView];
 
     [self.grayView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.edges.equalTo(weakSelf.redView).with.insets(UIEdgeInsetsMake(20, 20, 20, 20));
+        // make.edges.equalTo(weakSelf.redView).with.insets(UIEdgeInsetsMake(20, 20, 20, 20));
 
         //上述代码也可以拆分为：
         //可以使用with对同一条约束设置参数
@@ -97,8 +99,39 @@ mas_lessThanOrEqualTo就是小于等于；
         make.bottom.equalTo(weakSelf.redView).with.offset(-20);
         make.right.equalTo(weakSelf.redView).with.offset(-20);
     }];
-
 }
+
+//在灰色View里面绘制两个等宽等间距的View,设置左右边距、相互之间边距为15
+- (void)setTwoViewInGrayView
+{
+    WeakSelf(weakSelf);
+    UIView *subView1 = [[UIView alloc] init];
+    UIView *subView2 = [[UIView alloc] init];
+
+    subView1.backgroundColor = [UIColor orangeColor];
+    subView2.backgroundColor = [UIColor blueColor];
+
+    [self.grayView addSubview:subView1];
+    [self.grayView addSubview:subView2];
+
+    [subView1 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(weakSelf.grayView.mas_centerY);
+        make.left.equalTo(weakSelf.grayView.mas_left).with.offset(15);
+        make.right.equalTo(subView2.mas_left).with.offset(-15);
+        make.height.equalTo(@50);
+        make.width.equalTo(subView2.mas_width);
+    }];
+
+    [subView2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(weakSelf.grayView.mas_centerY);
+        make.left.equalTo(subView1.mas_right).with.offset(15);
+        make.right.equalTo(weakSelf.grayView.mas_right).offset(-15);
+        make.height.equalTo(@50);
+        make.width.equalTo(subView1.mas_width);
+    }];
+}
+
+
 
 @end
 
