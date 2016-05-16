@@ -191,6 +191,11 @@ mas_lessThanOrEqualTo就是小于等于；
  源码对with的解释是：with是一个可选的语法属性，没有任何影响但是能提高约束的可读性。
  */
 
+/**
+ *  centerX:X轴中心位置；
+    centerY:Y轴中心位置；
+ */
+
 @implementation FirstViewController
 
 - (void)viewDidLoad
