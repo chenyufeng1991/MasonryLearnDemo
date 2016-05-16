@@ -159,16 +159,25 @@ mas_lessThanOrEqualTo就是小于等于；
   (2)如果是等于关系，并且右边的view是父view，equal_to也可以省略。
  */
 
+/**
+ *  shorthand简便写法：Masonry提供了不加mas_前缀的方法，只需要定义几个宏。
+ （1）MAS_SHORTHAND
+ 定义了MAS_SHORTHAND宏之后，就可以使用UIView,NSArray中不带mas_前缀的makeConstraints,updateConstraints,remakeConstraints.以及UIView中不带mas_前缀的Attribute。
+ 
+ （2）MAS_SHORTHAND_GLOBALS
+ 默认的equalTo方法只接收id类型的对象，有时候我们想传入一个CGFloat，CGSize，UIEdgeInsets，还需要转换为NSValue对象，比较麻烦。只需要定义MAS_SHORTHAND_GLOBALS宏，就可以直接对equalTo传入基础类型，Masonry自动转化为NSValue对象。
+ */
+
 @implementation FirstViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //    [self setRedView];
-    //    [self setGrayViewEdgeInsetToRedView];
-    //    [self setTwoViewInGrayView];
-    //
-    //    [self setMutiplierAndConstant];
+    [self setRedView];
+    [self setGrayViewEdgeInsetToRedView];
+    [self setTwoViewInGrayView];
+
+    [self setMutiplierAndConstant];
 
     [self setViewWithKey];
 }
