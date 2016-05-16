@@ -171,6 +171,26 @@ mas_lessThanOrEqualTo就是小于等于；
  默认的equalTo方法只接收id类型的对象，有时候我们想传入一个CGFloat，CGSize，UIEdgeInsets，还需要转换为NSValue对象，比较麻烦。只需要定义MAS_SHORTHAND_GLOBALS宏，就可以直接对equalTo传入基础类型，Masonry自动转化为NSValue对象。
  */
 
+/**
+ *  Masonry共有13个类，这13个类分为5个模块：
+ Core：MASConstraintMaker,MASViewConstraint,MASCompositeConstraint,MASConstraint;
+ Property:MASLayoutConstraint,MASViewAttribute;
+ Public:NSArray+MASAdditions,View+MASAdditions;
+ Help:NSLayoutConstraint+MASDebugAdditions,ViewController+MASAdditions,MASUtilities;
+ Shorthand:NSArray+MASShorthandAdditions,View+MASShorthandAddtions
+ 
+ makes debug and log output of NSLayoutConstraints more readable
+ (1)NSLayoutConstraint+MASDebugAdditions:在头文件中作者已经说明：该类是为了NSLayoutConstraints的调试和日志输出更具有可读性。比如在约束冲突的时候，更易读。如果View或constraint设置了mas_key,直接用key的值显示到desctiption中，如果没有设置，直接显示View或constraint的指针。
+ （2）NSArray+MASShorthandAdditions和View+MASShorthandAddtions中定义了不带mas_前缀的扩展。这些扩展根据是否定义了MAS_SHORTHAND来确定是否编译。
+ （3）NSArray+MASAddtons:对外暴露添加、更新、移除约束的方法。
+ （4）View+MASAddtions:为View增加mas_top,mas_left等属性。
+ */
+
+/**
+ *  with的使用：
+ 源码对with的解释是：with是一个可选的语法属性，没有任何影响但是能提高约束的可读性。
+ */
+
 @implementation FirstViewController
 
 - (void)viewDidLoad
