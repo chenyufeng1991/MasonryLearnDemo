@@ -6,11 +6,14 @@
 //  Copyright © 2016年 chenyufengweb. All rights reserved.
 //
 
+#define MAS_SHORTHAND
+#define MAS_SHORTHAND_GLOBALS
 #import "FirstViewController.h"
 #import "Masonry.h"
 
 //定义宏，用于block
 #define WeakSelf(weakSelf) __weak __typeof(&*self)weakSelf = self;
+
 
 @interface FirstViewController ()
 
@@ -347,6 +350,38 @@ mas_lessThanOrEqualTo就是小于等于；
         make.left.offset(10);
         make.right.offset(-10);
     }];
+}
+
+
+//使用宏定义后，我还是以上面setViewWithKey中的实现为例
+/**
+ *  #define MAS_SHORTHAND
+    #define MAS_SHORTHAND_GLOBALS
+    #import "Masonry.h"
+ 
+ 注意： #import "Masonry.h"导入头文件一定要在两个宏定义之后。
+ 
+ 添加了MAS_SHORTHAND之后，就不用带mas_前缀；
+ 添加了MAS_SHORTHAND_GLOBALS之后，equalTo等价于mas_equalTo
+
+ */
+
+- (void)useShorthand
+{
+    UIView *firstView = [[UIView alloc] init];
+    firstView.backgroundColor = [UIColor blackColor];
+    [self.view addSubview:firstView];
+
+    self.view.mas_key = @"self.view";
+    firstView.mas_key = @"firstView";
+
+    //写一个冲突的约束
+    [firstView makeConstraints:^(MASConstraintMaker *make) {
+        make.size.equalTo(CGSizeMake(100, 100));
+        make.left.offset(10);
+        make.right.offset(-10);
+    }];
+
 }
 
 
