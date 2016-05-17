@@ -236,14 +236,21 @@ mas_lessThanOrEqualTo就是小于等于；
     [self.redView addSubview:self.grayView];
 
     [self.grayView mas_makeConstraints:^(MASConstraintMaker *make) {
+        //可以使用符合属性设置
         // make.edges.equalTo(weakSelf.redView).with.insets(UIEdgeInsetsMake(20, 20, 20, 20));
 
         //上述代码也可以拆分为：
         //可以使用with对同一条约束设置参数
-        make.top.equalTo(weakSelf.redView).with.offset(20);
-        make.left.equalTo(weakSelf.redView).with.offset(20);
-        make.bottom.equalTo(weakSelf.redView).with.offset(-20);
-        make.right.equalTo(weakSelf.redView).with.offset(-20);
+        //        make.top.equalTo(weakSelf.redView).with.offset(20);
+        //        make.left.equalTo(weakSelf.redView).with.offset(20);
+        //        make.bottom.equalTo(weakSelf.redView).with.offset(-20);
+        //        make.right.equalTo(weakSelf.redView).with.offset(-20);
+
+        // 也可以去掉with
+        make.top.equalTo(weakSelf.redView).offset(20);
+        make.left.equalTo(weakSelf.redView).offset(20);
+        make.bottom.equalTo(weakSelf.redView).offset(-20);
+        make.right.equalTo(weakSelf.redView).offset(-20);
     }];
 }
 
@@ -366,6 +373,7 @@ mas_lessThanOrEqualTo就是小于等于；
     firstView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:firstView];
 
+    //这里使用mas_key参数
     self.view.mas_key = @"self.view";
     firstView.mas_key = @"firstView";
 
